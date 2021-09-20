@@ -9,20 +9,19 @@ volumes:
   mdb:
     driver: local
     driver_opts:
-      device: home/bmohor/data/mdb
+      type: none
+      device: /home/bmohor/data/msq/
   wp:
     driver: local
     driver_opts:
-      device: home/bmohor/data/wp
+      type: none
+      device: /home/bmohor/data/wp/
 
 services:
   mysql:
     build:
-      context: srcs/mariadb
-    env_file: .env
-    image: mariaDB
-    ports:
-      - "3306:3306"
+      context: requirements/mariadb
+    image: mariadb
     volumes:
       - mdb:/var/lib/mysql
     networks:
@@ -31,10 +30,15 @@ services:
   
   wordpress:
     build:
-      context: srcs/wordpress
+      context: requirements/wordpress
+      args:
+        U: ${MSQL_US}
+        P: ${MSQL_PASS}
+        W: ${WP_BASE}
+        B: ${COUNT_MDB}
+    env_file:
+      - .env
     image: wordpress
-    ports:
-      - "9000:9000"
     volumes:
       - wp:/var/www/bmohorwp
     networks:
@@ -43,7 +47,7 @@ services:
 
   nginx:
     build:
-      context: srcs/nginx
+      context: requirements/nginx
     image: nginx
     ports:
       - "443:443"
