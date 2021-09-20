@@ -8,17 +8,17 @@ ARG	P
 ARG	W
 ARG	B
 
-RUN	mkdir -p /var/www/bmohorwp
-WORKDIR	/var/www/bmohorwp/
+RUN	mkdir -p /var/www/bmohorstuff
+WORKDIR	/var/www/bmohorstuff/
 RUN	wget http://wordpress.org/latest.tar.gz \
 	&& tar -xzvf latest.tar.gz \
 	&& rm latest.tar.gz
 RUN	sed -i "s/listen = 127.0.0.1:9000/listen = 9000/g" ~/../etc/php7/php-fpm.d/www.conf
-COPY	./srcs/wp-config.php /var/www/bmohorwp
-RUN	sed -i "s/DB_USER/${U}/g" wp-config.php
-RUN	sed -i "s/DB_PASS/${P}/g" wp-config.php
-RUN	sed -i "s/DB_NAME/${W}/g" wp-config.php
-RUN	sed -i "s/DB_HOST/${B}/g" wp-config.php
+COPY	./srcs/wp-config.php .
+RUN	sed -i "s/_WP_BASE/${U}/g" wp-config.php
+RUN	sed -i "s/_MSQ_USER/${P}/g" wp-config.php
+RUN	sed -i "s/_WP_PASS/${W}/g" wp-config.php
+RUN	sed -i "s/_MSQ_HOST/${B}/g" wp-config.php
 WORKDIR /
 ENTRYPOINT	["usr/sbin/php-fpm7"]
 CMD			["-F"]
