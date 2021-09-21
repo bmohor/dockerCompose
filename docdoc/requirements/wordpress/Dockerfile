@@ -1,7 +1,7 @@
 FROM	alpine:3.13.5
 RUN	apk update
 RUN	apk upgrade
-RUN	apk add wget php7-fpm bash fcgi
+RUN	apk add wget vim bash php7 php7-fpm php7-mysqli php7-json
 
 ARG	U
 ARG	P
@@ -20,5 +20,5 @@ RUN	sed -i "s/_MSQ_USER/${P}/g" wp-config.php
 RUN	sed -i "s/_WP_PASS/${W}/g" wp-config.php
 RUN	sed -i "s/_MSQ_HOST/${B}/g" wp-config.php
 WORKDIR /
-ENTRYPOINT	["usr/sbin/php-fpm7"]
+ENTRYPOINT	["/usr/sbin/php-fpm7"]
 CMD			["-F"]

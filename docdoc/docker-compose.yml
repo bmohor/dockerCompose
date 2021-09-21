@@ -8,12 +8,14 @@ networks:
 volumes:
   mdb:
     driver: local
+    name: mdb
     driver_opts:
       o: bind
       type: none
       device: /home/bmohor/data/msq/
   wp:
     driver: local
+    name: wp
     driver_opts:
       o: bind
       type: none
@@ -24,30 +26,30 @@ services:
     build:
       context: requirements/mariadb
       args:
-        WP_BASE: ${WP_BASE}
-        R_PASS: ${MSQL_R_PASS}
-        PASS: ${MSQL_PASS}
-        USER: ${MSQL_US}
-    env_file:
-      - .env
+        - WP_BASE=${WP_BASE}
+        - R_PASS=${MSQL_R_PASS}
+        - PASS=${MSQL_PASS}
+        - USER=${MSQL_US}
+    container_name: mariaDB
     image: mariadb
+    env_file: .env
     volumes:
       - mdb:/var/lib/mysql
     networks:
       - bmohor.42.fr
     restart: always
-    container_name: mdb 
+
   wordpress:
     build:
       context: requirements/wordpress
       args:
-        U: ${MSQL_US}
-        P: ${MSQL_PASS}
-        W: ${WP_BASE}
-        B: ${COUNT_MDB}
-    env_file:
-      - .env
-    image: wordpress
+        - U=${MSQL_US}
+        - P=${MSQL_PASS}
+        - W=${WP_BASE}
+        - B=${COUNT_MDB}
+    container_name: wordpress
+    image: wordpress 
+    env_file: .env
     volumes:
       - wp:/var/www/bmohorstuff
     depends_on:
@@ -59,6 +61,7 @@ services:
   nginx:
     build:
       context: requirements/nginx
+    container_name: nginx
     image: nginx
     ports:
       - "443:443"
