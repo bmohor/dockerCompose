@@ -13,7 +13,6 @@ RUN	mkdir /run/mysqld
 
 COPY	./srcs/my.cnf /etc/my.cnf
 COPY	./srcs/start_mdb.sh /
-COPY	./srcs/wordpress.sql /
 RUN	chmod a+x start_mdb.sh
 
 RUN	mariadb-install-db -u root
