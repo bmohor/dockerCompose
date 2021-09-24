@@ -11,8 +11,8 @@ ARG	USER
 
 RUN	mkdir /run/mysqld
 
-COPY	./srcs/my.cnf /etc/my.cnf
-COPY	./srcs/start_mdb.sh /
+COPY	./tools/my.cnf /etc/my.cnf
+COPY	./tools/start_mdb.sh /
 RUN	chmod a+x start_mdb.sh
 
 RUN	mariadb-install-db -u root
