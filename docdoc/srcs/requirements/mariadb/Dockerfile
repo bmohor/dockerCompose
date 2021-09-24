@@ -19,4 +19,4 @@ RUN	mariadb-install-db -u root
 RUN	/start_mdb.sh
 
 ENTRYPOINT ["mysqld"]
-CMD	["-u root"]
+CMD	["-u root -pidk"]
